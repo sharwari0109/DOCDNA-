@@ -8,7 +8,7 @@ import { BrandMark } from "@/components/BrandMark";
 const nav = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/upload", label: "Verify Document", icon: ShieldCheck },
-  { to: "/history", label: "Activity Timeline", icon: Clock3 },
+  { to: "/history", label: "History", icon: Clock3 },
   { to: "/settings", label: "Settings", icon: Settings },
 ] as const;
 

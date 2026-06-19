@@ -50,9 +50,25 @@ function UploadPage() {
 
       let rec: DocRecord;
       if (prior) {
-        rec = { ...prior, status: "authentic" };
-        rec.events = [...prior.events, { at: now, label: "Re-verified — hash matches original" }];
-        toast.success("Document verified — hash matches.");
+        rec = {
+          id: cryptoRandom(),
+          name: f.name,
+          size: f.size,
+          hash,
+          cid,
+          txHash,
+          wallet,
+          timestamp: now,
+          status: "authentic",
+          events: [
+            { at: now, label: "Uploaded for verification" },
+            { at: now + 500, label: "SHA-256 generated" },
+            { at: now + 1200, label: "Pinned on IPFS" },
+            { at: now + 2000, label: "Re-verified — hash matches original proof" },
+          ],
+        };
+        addRecord(rec);
+        toast.success("Document verified — history updated.");
       } else if (tamperedFrom) {
         const diff = mockDiff(tamperedFrom.hash, hash);
         rec = {
@@ -65,6 +81,8 @@ function UploadPage() {
           changes: diff.changes,
           trustScore: diff.trustScore,
           events: [
+            { at: now, label: "Uploaded for verification" },
+            { at: now + 500, label: "SHA-256 generated" },
             { at: tamperedFrom.timestamp, label: "Original anchored" },
             { at: now, label: "Modification detected" },
             { at: now + 1000, label: "Tampered report generated" },
@@ -80,7 +98,7 @@ function UploadPage() {
           timestamp: now,
           status: "authentic",
           events: [
-            { at: now, label: "Uploaded" },
+            { at: now, label: "Uploaded for verification" },
             { at: now + 500, label: "SHA-256 generated" },
             { at: now + 1200, label: "Pinned on IPFS" },
             { at: now + 2000, label: "Anchored on Polygon Amoy" },
