@@ -39,23 +39,23 @@ function Dashboard() {
     { label: "Fraud Alerts", value: fraudAlerts, icon: TriangleAlert, tone: "text-primary", note: "New: 2" },
   ];
 
-  const recentActivity = records.slice(0, 5).map((record, index) => ({
+  const recentHistory = records.slice(0, 5).map((record, index) => ({
     title:
       record.status === "authentic"
-        ? "Document Verified"
+        ? "Verified Document"
         : record.status === "tampered"
-        ? "Tamper Alert"
-        : "New Upload",
+        ? "Tampered Document"
+        : "Pending Verification",
     detail: record.name,
     time: new Date(record.timestamp).toLocaleDateString(),
     tone: record.status,
     key: `${record.id}-${index}`,
   }));
 
-  const displayActivity = recentActivity.length
-    ? recentActivity.slice(0, 1)
+  const displayHistory = recentHistory.length
+    ? recentHistory
     : [
-        { title: "Document Verified", detail: "NotarizationDoc1.pdf", time: "19/06/2026", tone: "authentic", key: "a" },
+        { title: "Verified Document", detail: "NotarizationDoc1.pdf", time: "19/06/2026", tone: "authentic", key: "a" },
       ];
 
   return (
@@ -120,10 +120,17 @@ function Dashboard() {
 
         <div className="space-y-6">
           <div className="app-panel rounded-2xl p-6">
-            <h2 className="text-base font-semibold">Recent Activity</h2>
-            <p className="mt-1 text-xs text-muted-foreground">Latest verification events and operational alerts.</p>
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h2 className="text-base font-semibold">Recent History</h2>
+                <p className="mt-1 text-xs text-muted-foreground">Latest document proofs saved from your verification uploads.</p>
+              </div>
+              <Link to="/history" className="text-xs font-medium text-primary hover:text-primary-glow">
+                View all
+              </Link>
+            </div>
             <div className="mt-5 space-y-4">
-              {displayActivity.map(item => (
+              {displayHistory.map(item => (
                 <div key={item.key} className="flex items-start gap-3">
                   <div className={`mt-1 h-2.5 w-2.5 rounded-full ${
                     item.tone === "tampered" ? "bg-danger" : item.tone === "pending" ? "bg-warning" : "bg-success"
