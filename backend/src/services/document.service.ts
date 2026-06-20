@@ -94,9 +94,15 @@ export class DocumentService {
     ownerWallet: string;
     documentHash: string;
   }) {
-    const ipfs = await pinataService.uploadToIPFS(params.buffer, params.fileName, params.fileType);
-    await auditService.emit("upload_progress", { stage: "ipfs_stored", cid: ipfs.cid, fileName: params.fileName });
+    const ipfs = await pinataService.uploadToIPFS(
+  params.buffer,
+  params.fileName,
+  params.fileType);
 
+
+  console.log("===== PINATA SUCCESS =====");
+  console.log("CID:", ipfs.cid);
+  console.log("Gateway:", ipfs.gatewayUrl);
     const chain = await blockchainService.registerDocumentOnChain(params.documentHash, ipfs.cid, params.ownerWallet);
     await auditService.emit("blockchain_confirmation", {
       txHash: chain.txHash,

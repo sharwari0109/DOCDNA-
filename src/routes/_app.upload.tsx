@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { uploadToPinata } from "@/lib/pinata";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -6,8 +7,18 @@ import {
   Loader2, ShieldCheck, ShieldAlert, Copy, ExternalLink, RotateCcw, Download,
 } from "lucide-react";
 import {
-  sha256, mockCid, mockTx, getWallet, addRecord, detectTamper, findByHash,
-  mockDiff, formatBytes, type DocRecord, generateDocumentQRCode, loadCurrentResult, saveCurrentResult,
+  sha256,
+  mockTx,
+  getWallet,
+  addRecord,
+  detectTamper,
+  findByHash,
+  mockDiff,
+  formatBytes,
+  type DocRecord,
+  generateDocumentQRCode,
+  loadCurrentResult,
+  saveCurrentResult,
 } from "@/lib/docdna";
 import { toast } from "sonner";
 
@@ -55,8 +66,8 @@ function UploadPage() {
       const tamperedFrom = detectTamper(f.name, hash, f.size, wallet);
 
       setStage("ipfs");
-      const cid = mockCid();
-      await wait(900);
+      const cid = await uploadToPinata(f);
+      
       setStage("chain");
       const txHash = mockTx();
       await wait(1100);
